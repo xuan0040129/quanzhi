@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全职高手 · 荣耀之路</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg: #f5f3f0;
+  --surface: #ffffff;
+  --surface-2: #faf9f7;
+  --border: #e5e0d8;
+  --border-strong: #d5cec2;
+  --red: #a82020;
+  --red-deep: #7e1818;
+  --red-soft: rgba(168,32,32,0.06);
+  --gold: #c4a040;
+  --gold-deep: #9a7820;
+  --gold-soft: rgba(196,160,64,0.1);
+  --hp: #c0392b;
+  --mp: #2980b9;
+  --text: #2a2420;
+  --text-2: #5a524a;
+  --text-3: #9a9084;
+  --font-d: 'Noto Serif SC', serif;
+  --font-s: 'Noto Sans SC', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-s);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 顶部导航 */
+.top-nav {
+  height: 56px;
+  background: linear-gradient(120deg, #7e1818 0%, #a82020 40%, #b82828 60%, #7e1818 100%);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 20;
+  box-shadow: 0 2px 12px rgba(126,24,24,0.2);
+}
+.top-nav::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 10%, var(--gold) 40%, var(--gold) 60%, transparent 90%);
+  opacity: 0.6;
+}
+.nav-logo { font-family: var(--font-d); font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 8px; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+.nav-sub { font-size: 8px; color: rgba(255,255,255,0.5); letter-spacing: 5px; margin-left: 10px; margin-top: 8px; }
+.nav-spacer { flex: 1; }
+.nav-actions { display: flex; gap: 6px; }
+.nav-actions button {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.85); padding: 7px 14px; border-radius: 4px;
+  cursor: pointer; font-size: 11px; letter-spacing: 2px; font-family: var(--font-s); transition: all 0.2s;
+}
+.nav-actions button:hover { background: rgba(255,255,255,0.2); color: #fff; }
+
+/* 主体 */
+.main { flex:1; display:flex; overflow:hidden; }
+
+/* 左侧角色面板 */
+.left-panel {
+  width: 240px; background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto;
+}
+.char-card { padding: 16px 14px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #fdfcfa 0%, #faf9f7 100%); }
+.char-header { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.char-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, #3a2a18 0%, #5a4a28 100%);
+  border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center;
+  font-size: 22px; color: var(--gold); flex-shrink: 0; box-shadow: 0 0 14px rgba(196,160,64,0.3);
+}
+.char-name { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: 1px; }
+.char-identity { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+.char-level-badge {
+  display: inline-block; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: #fff; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  letter-spacing: 1px; margin-top: 4px;
+}
+.exp-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.exp-label { font-size: 9px; color: var(--text-3); width: 22px; flex-shrink: 0; }
+.exp-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.exp-bar { height: 100%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); border-radius: 3px; transition: width 0.5s ease; }
+.exp-text { font-size: 8px; color: var(--text-3); flex-shrink: 0; }
+.stat-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.stat-icon { width: 22px; font-size: 9px; font-weight: 700; flex-shrink: 0; text-align: center; }
+.stat-icon.hp { color: var(--hp); }
+.stat-icon.mp { color: var(--mp); }
+.stat-bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.stat-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+.stat-bar.hp { background: linear-gradient(90deg, #8a2018, #d04030); }
+.stat-bar.mp { background: linear-gradient(90deg, #1a5a8a, #4090c0); }
+.stat-text { font-size: 8px; color: var(--text-3); flex-shrink: 0; min-width: 40px; text-align: right; }
+.res-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px;
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+}
+.res-item { font-size: 10px; color: var(--text-2); display: flex; align-items: center; gap: 4px; }
+.res-item b { color: var(--text); font-weight: 600; }
+.equip-section { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.equip-title { font-size: 9px; color: var(--text-3); letter-spacing: 3px; margin-bottom: 8px; }
+.equip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 8px; }
+.equip-slot {
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px;
+  padding: 5px 8px; font-size: 9px; color: var(--text-2); display: flex; align-items: center; gap: 4px;
+}
+.equip-slot .e-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.equip-slot .e-grade { font-size: 8px; color: var(--gold-deep); margin-left: auto; }
+.panel-nav { flex: 1; padding: 10px 8px; }
+.panel-nav .nav-section-title { font-size: 8px; color: var(--text-3); letter-spacing: 4px; padding: 8px 8px 4px; }
+.panel-nav button {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  background: none; border: none; padding: 10px 12px;
+  font-size: 12px; color: var(--text-2); cursor: pointer;
+  font-family: var(--font-s); letter-spacing: 1px; border-radius: 6px;
+  transition: all 0.2s; text-align: left;
+}
+.panel-nav button:hover { background: var(--red-soft); color: var(--red); }
+.panel-nav button.active { background: var(--red-soft); color: var(--red-deep); font-weight: 600; }
+
+/* 中央 */
+.content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+.story-flow {
+  flex: 1; overflow-y: auto; padding: 24px 36px 16px;
+  display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;
+}
+.narr { text-align: center; color: var(--text-3); font-size: 13px; line-height: 2; letter-spacing: 2px; font-weight: 300; padding: 2px 40px; }
+.dlg {
+  background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--red);
+  border-radius: 0 8px 8px 0; padding: 11px 16px; font-size: 13px; line-height: 1.7;
+  max-width: 72%; color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  animation: dlgIn 0.3s ease;
+}
+.dlg .spk { font-weight: 700; color: var(--red); letter-spacing: 1px; margin-right: 6px; }
+.wc {
+  background: var(--gold-soft); border: 1px solid rgba(196,160,64,0.3); border-radius: 6px;
+  padding: 8px 12px; font-size: 11px; color: #6a5420;
+}
+.wc .tag {
+  display: inline-block; background: var(--gold); color: #fff; font-size: 8px;
+  padding: 2px 7px; border-radius: 3px; margin-right: 7px; font-weight: 700; letter-spacing: 2px;
+}
+.bar {
+  align-self: center; text-align: center; font-size: 10px; color: var(--red-deep);
+  background: linear-gradient(135deg, var(--red-soft), var(--gold-soft));
+  border: 1px solid rgba(168,32,32,0.18); border-radius: 20px; padding: 6px 18px;
+  font-weight: 600; letter-spacing: 2px; margin: 2px 0;
+}
+.sys-msg {
+  text-align: center; font-size: 12px; color: var(--red);
+  background: var(--red-soft); border: 1px dashed rgba(168,32,32,0.3);
+  border-radius: 8px; padding: 10px 16px; letter-spacing: 1px;
+}
+.loading-msg {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  text-align: center; font-size: 14px; font-weight: 700; color: #3a2a00;
+  background: linear-gradient(135deg, #ffe9a8, #f5d678);
+  border: 2px solid #c4a040; border-radius: 20px; padding: 10px 24px;
+  letter-spacing: 2px; box-shadow: 0 2px 16px rgba(196,160,64,0.4);
+  animation: loadingPulse 1s infinite;
+}
+@keyframes loadingPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.65; } }
+@keyframes dlgIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+
+/* 选项 */
+.options {
+  display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 20px;
+  border-top: 1px solid var(--border); background: var(--surface);
+}
+.opt {
+  background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 6px;
+  padding: 11px 14px; font-size: 11px; color: var(--text-2); cursor: pointer;
+  flex: 1; min-width: 160px; text-align: left; line-height: 1.5;
+  font-family: var(--font-s); letter-spacing: 0.5px; transition: all 0.2s;
+}
+.opt:hover {
+  border-color: var(--red); color: var(--red-deep);
+  background: var(--red-soft); transform: translateY(-1px);
+}
+
+/* 输入 */
+.input-row {
+  display: flex; gap: 8px; padding: 10px 20px;
+  border-top: 1px solid var(--border); background: var(--surface);
+}
+.input-row input {
+  flex: 1; background: var(--surface-2); border: 1px solid var(--border-strong);
+  border-radius: 6px; padding: 10px 14px; font-size: 12px; color: var(--text);
+  outline: none; font-family: var(--font-s); letter-spacing: 1px; transition: all 0.2s;
+}
+.input-row input::placeholder { color: var(--text-3); }
+.input-row input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(168,32,32,0.08); }
+.send-btn {
+  background: linear-gradient(135deg, var(--red) 0%, var(--red-deep) 100%);
+  border: none; color: #fff; padding: 10px 20px; border-radius: 6px;
+  font-size: 12px; font-weight: 600; letter-spacing: 3px; cursor: pointer;
+  font-family: var(--font-s); transition: all 0.2s; white-space: nowrap;
+}
+.send-btn:hover { box-shadow: 0 4px 14px rgba(168,32,32,0.25); transform: translateY(-1px); }
+.send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.quick-row { display: flex; gap: 4px; padding: 0 20px 6px; background: var(--surface); }
+.quick-row button {
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text-3);
+  padding: 3px 10px; border-radius: 12px; font-size: 9px; letter-spacing: 1px;
+  cursor: pointer; font-family: var(--font-s); transition: all 0.2s;
+}
+.quick-row button:hover { border-color: var(--red); color: var(--red); }
+
+/* 右侧关系 */
+.roster {
+  width: 160px; background: var(--surface); border-left: 1px solid var(--border);
+  padding: 14px 10px; overflow-y: auto; flex-shrink: 0;
+}
+.roster-title {
+  font-size: 8px; color: var(--text-3); letter-spacing: 4px; text-align: center;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 10px;
+}
+.roster-card {
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
+  padding: 8px 10px; margin-bottom: 6px; transition: all 0.2s;
+}
+.roster-card:hover { border-color: var(--gold); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.roster-card .rname { font-size: 10px; font-weight: 600; color: var(--red-deep); letter-spacing: 1px; }
+.roster-card .rrel { font-size: 8px; color: var(--text-3); margin-top: 2px; }
+.roster-card .rrel span { color: var(--gold-deep); }
+
+/* 弹窗 */
+.overlay {
+  position: fixed; inset: 0; background: rgba(40,30,20,0.35);
+  backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center;
+  z-index: 100; animation: fadeIn 0.2s;
+}
+.panel {
+  background: var(--surface); border: 1px solid var(--gold); border-radius: 10px;
+  padding: 24px; max-width: 460px; width: 92%; max-height: 75vh; overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12); animation: panelIn 0.25s;
+}
+.panel h2 {
+  font-family: var(--font-d); font-size: 17px; color: var(--red-deep); text-align: center;
+  letter-spacing: 5px; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 14px;
+}
+.panel .close {
+  display: block; margin: 14px auto 0; border: 1px solid var(--red); color: var(--red);
+  background: none; padding: 7px 24px; border-radius: 4px; font-size: 11px;
+  letter-spacing: 3px; cursor: pointer; font-family: var(--font-s); transition: all 0.2s;
+}
+.panel .close:hover { background: var(--red); color: #fff; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes panelIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+@media (max-width: 860px) {
+  .left-panel { display: none; }
+  .roster { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top-nav">
+  <span class="nav-logo">荣耀</span>
+  <span class="nav-sub">GLORY</span>
+  <div class="nav-spacer"></div>
+  <div class="nav-actions">
+    <button onclick="saveGame()">存档</button>
+    <button onclick="loadGame()">读取</button>
+  </div>
+</header>
+
+<div class="main">
+  <aside class="left-panel">
+    <div class="char-card">
+      <div class="char-header">
+        <div class="char-avatar" id="avatar">?</div>
+        <div>
+          <div class="char-name" id="charName">未创建角色</div>
+          <div class="char-identity" id="charIdentity">—</div>
+          <span class="char-level-badge" id="charLv">Lv 1</span>
+        </div>
+      </div>
+      <div class="exp-row">
+        <span class="exp-label">EXP</span>
+        <div class="exp-bar-wrap"><div class="exp-bar" id="expBar" style="width:0%;"></div></div>
+        <span class="exp-text" id="expText">0/100</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-icon hp">HP</span>
+        <div class="stat-bar-wrap"><div class="stat-bar hp" id="hpBar" style="width:100%;"></div></div>
+        <span class="stat-text" id="hpText">100/100</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-icon mp">MP</span>
+        <div class="stat-bar-wrap"><div class="stat-bar mp" id="mpBar" style="width:100%;"></div></div>
+        <span class="stat-text" id="mpText">50/50</span>
+      </div>
+      <div class="res-grid">
+        <div class="res-item">◈ 银币 <b id="silverDisp">0</b></div>
+        <div class="res-item">⚔ <b id="arenaDisp">0胜0负</b></div>
+        <div class="res-item">◈ <b id="locDisp">第十区·新手村</b></div>
+        <div class="res-item">◈ <b id="guildDisp">未加入</b></div>
+      </div>
+    </div>
+    <div class="equip-section">
+      <div class="equip-title">装备</div>
+      <div class="equip-grid">
+        <div class="equip-slot">🗡 <span class="e-name" id="weaponDisp">白装</span><span class="e-grade" id="weaponGrade"></span></div>
+        <div class="equip-slot">🛡 <span class="e-name" id="armorDisp">白装</span><span class="e-grade" id="armorGrade"></span></div>
+      </div>
+    </div>
+    <nav class="panel-nav">
+      <div class="nav-section-title">面板</div>
+      <button class="active" onclick="showGloryPanel()">◈ 荣耀面板</button>
+      <button onclick="showQuestPanel()">▤ 任务面板</button>
+      <button onclick="showHintPanel()">✦ 提示</button>
+      <div class="nav-section-title">系统</div>
+      <button onclick="resetGame()">↺ 重新开始</button>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="story-flow" id="story"></div>
+    <div class="quick-row">
+      <button onclick="quickWord('荣耀')">荣耀</button>
+      <button onclick="quickWord('任务')">任务</button>
+      <button onclick="quickWord('提示')">提示</button>
+      <button onclick="quickWord('存档')">存档</button>
+    </div>
+    <div class="options" id="optionsWrap" style="display:none;"></div>
+    <div class="input-row">
+      <input type="text" id="userInput" placeholder="输入你的行动..." onkeydown="if(event.key==='Enter')sendInput()">
+      <button class="send-btn" id="sendBtn" onclick="sendInput()">行动</button>
+    </div>
+  </main>
+
+  <aside class="roster">
+    <div class="roster-title">荣耀人物</div>
+    <div id="rosterCards"></div>
+  </aside>
+</div>
+
+<div class="overlay" id="overlay" style="display:none;" onclick="closeModal(event)">
+  <div class="panel" id="panelBody"></div>
+</div>
+
+<script>
+// ================================================================
+//  全职高手 · 荣耀之路  —— AI驱动完整版
+//  整合：AI调用逻辑 + 24职业 + 60+怪物 + 全装备 + 13副本
+//  数据来源：用户提供的完整设定
+// ================================================================
+
+// ==================== API配置 ====================
+const API_URL = 'https://love.qinyan.icu/v1/chat/completions';
+const API_KEY = 'sk-EtVVtHw7Zl75VFzkhYchKNXt5VywIh4MpQWh8hWcyHhRI9e5';
+const MODEL = 'claude-sonnet-4-6';
+
+// ==================== 内置数据 ====================
+
+// 24职业数据（精简版）
+const CLASS_DATA = {
+  '战斗法师': { starterSkills: ['天击','龙牙','落花掌','圆舞棍','连突'], stats: {str:5,int:3,vit:4,spi:2,agi:4,tec:5}, hp:300, mp:120, desc:'近战魔法·炫纹连击' },
+  '元素法师': { starterSkills: ['元素之力','雷电光环','冰霜雪球','火焰爆弹','暗夜飞影'], stats: {str:2,int:6,vit:3,spi:5,agi:3,tec:4}, hp:220, mp:180, desc:'远程元素·控场大师' },
+  '魔道学者': { starterSkills: ['清扫','暗影斗篷','魔法弹','修鲁鲁','驱散粉'], stats: {str:3,int:5,vit:3,spi:4,agi:4,tec:4}, hp:250, mp:160, desc:'炼金药瓶·机械召唤' },
+  '召唤师': { starterSkills: ['契约召唤:哥布林','精灵投射','兽灵标记','幻镜','藤蔓束缚'], stats: {str:2,int:5,vit:3,spi:5,agi:3,tec:4}, hp:230, mp:170, desc:'召唤军团·以多打少' },
+  '剑客': { starterSkills: ['上挑','格挡','连突刺','落凤斩','迎风刺'], stats: {str:5,int:2,vit:3,spi:2,agi:6,tec:5}, hp:280, mp:100, desc:'光剑精通·华丽连招' },
+  '鬼剑士': { starterSkills: ['鬼爪','鬼斩','月光斩','刀魂','冥月斩'], stats: {str:5,int:3,vit:4,spi:3,agi:3,tec:4}, hp:290, mp:120, desc:'鬼阵控制·暗属性诅咒' },
+  '魔剑士': { starterSkills: ['裂波斩','地裂斩','波动刺','魔光斩','震荡斩'], stats: {str:4,int:4,vit:3,spi:3,agi:4,tec:4}, hp:260, mp:130, desc:'属性切换·魔法剑术' },
+  '狂剑士': { starterSkills: ['倒斩','重击','崩山击','十字斩','嗜血'], stats: {str:7,int:1,vit:5,spi:1,agi:3,tec:3}, hp:350, mp:80, desc:'嗜血狂暴·越战越强' },
+  '神枪手': { starterSkills: ['浮空弹','膝袭','滑铲','踏射','旋风脚'], stats: {str:3,int:2,vit:3,spi:2,agi:7,tec:6}, hp:240, mp:90, desc:'双枪体术·花式射术' },
+  '枪炮师': { starterSkills: ['反坦克炮','激光炮','粗火','榴弹','重炮击退'], stats: {str:4,int:3,vit:4,spi:2,agi:3,tec:5}, hp:270, mp:100, desc:'超远程火力·重火器' },
+  '弹药专家': { starterSkills: ['浮空弹','僵直弹','燃烧弹','手雷','弹药扩充'], stats: {str:3,int:4,vit:3,spi:3,agi:5,tec:5}, hp:250, mp:120, desc:'属性子弹·异常弹种' },
+  '机械师': { starterSkills: ['机械引爆','小机器人','追踪者','机械修复','机械飞拳'], stats: {str:2,int:5,vit:3,spi:4,agi:4,tec:5}, hp:230, mp:140, desc:'机器人军团·科技碾压' },
+  '拳法家': { starterSkills: ['高飞脚','前踢','冲拳','钢筋铁骨','鹰踏'], stats: {str:6,int:1,vit:5,spi:2,agi:5,tec:3}, hp:330, mp:80, desc:'刚拳压制·霸体硬撼' },
+  '柔道': { starterSkills: ['背摔','抛投','接投','拆投','肘落'], stats: {str:5,int:2,vit:6,spi:2,agi:4,tec:3}, hp:340, mp:85, desc:'投技摔法·抓取无敌' },
+  '气功师': { starterSkills: ['气波弹','轰天炮','逆流','气波盾','念气罩'], stats: {str:2,int:5,vit:4,spi:5,agi:3,tec:4}, hp:240, mp:160, desc:'念气攻防·团队光环' },
+  '流氓': { starterSkills: ['勾拳','抛沙','膝撞','锁喉','板砖'], stats: {str:5,int:2,vit:4,spi:2,agi:4,tec:6}, hp:290, mp:90, desc:'异常状态·街头格斗' },
+  '刺客': { starterSkills: ['跳刀','割喉','空跃','爪刃','暗影刺'], stats: {str:4,int:1,vit:3,spi:2,agi:7,tec:6}, hp:230, mp:85, desc:'高速暗杀·背击必杀' },
+  '盗贼': { starterSkills: ['陷阱布置','闷棍','偷窃','潜行','毒刃'], stats: {str:3,int:2,vit:3,spi:3,agi:6,tec:6}, hp:240, mp:100, desc:'陷阱偷窃·潜行控制' },
+  '忍者': { starterSkills: ['断灭','手里剑','影分身术','烟玉','撒菱'], stats: {str:4,int:3,vit:3,spi:3,agi:6,tec:5}, hp:250, mp:110, desc:'忍术分身·火遁手里剑' },
+  '术士': { starterSkills: ['诅咒之箭','暗影波动','黑暗之爪','腐朽','恐惧咒'], stats: {str:2,int:6,vit:3,spi:5,agi:3,tec:4}, hp:220, mp:180, desc:'诅咒控制·恶魔召唤' },
+  '牧师': { starterSkills: ['治愈术','圣光弹','净化','守护光环','心灵抚慰'], stats: {str:2,int:5,vit:3,spi:6,agi:2,tec:3}, hp:230, mp:170, desc:'治疗增益·团队核心' },
+  '守护天使': { starterSkills: ['守护光环','圣盾','小治愈','惩戒光弹','祝福'], stats: {str:3,int:3,vit:6,spi:4,agi:2,tec:3}, hp:310, mp:110, desc:'绝对防御·守护队友' },
+  '骑士': { starterSkills: ['上斩','击退','挑衅','冲锋','吼叫'], stats: {str:6,int:1,vit:6,spi:2,agi:3,tec:3}, hp:350, mp:80, desc:'冲锋陷阵·铁壁防守' },
+  '驱魔师': { starterSkills: ['升天阵','星落','魂御','旋风','落雷符'], stats: {str:4,int:3,vit:4,spi:3,agi:3,tec:4}, hp:280, mp:110, desc:'落雷式神·驱邪诛魔' }
+};
+
+// 技能数据（含操作判定）
+const SKILL_DATA = {
+  '天击':{mul:1.3,mp:10,cd:3,lift:2,effect:'浮空'},'龙牙':{mul:1.5,mp:12,cd:4,lift:0,effect:'击退'},
+  '落花掌':{mul:2.0,mp:18,cd:5,lift:1,effect:'击倒'},'圆舞棍':{mul:1.8,mp:15,cd:6,lift:2,effect:'抓取'},
+  '连突':{mul:1.2,mp:8,cd:2,lift:0,effect:''},'上挑':{mul:1.3,mp:8,cd:3,lift:3,effect:'浮空'},
+  '格挡':{mul:0,mp:5,cd:2,lift:0,effect:'防御'},'连突刺':{mul:1.4,mp:10,cd:4,lift:0,effect:''},
+  '落凤斩':{mul:1.8,mp:15,cd:5,lift:4,effect:'击倒'},'迎风刺':{mul:1.2,mp:8,cd:3,lift:0,effect:''},
+  '反坦克炮':{mul:2.2,mp:20,cd:6,lift:2,effect:'击退'},'激光炮':{mul:2.5,mp:25,cd:8,lift:1,effect:'贯穿'},
+  '粗火':{mul:1.5,mp:12,cd:4,lift:0,effect:'灼烧'},'榴弹':{mul:1.8,mp:15,cd:5,lift:1,effect:''},
+  '重炮击退':{mul:1.2,mp:10,cd:3,lift:0,effect:'击退'},'元素之力':{mul:1.0,mp:5,cd:2,lift:0,effect:'蓄力'},
+  '雷电光环':{mul:1.4,mp:12,cd:4,lift:1,effect:'感电'},'冰霜雪球':{mul:1.2,mp:10,cd:3,lift:0,effect:'减速'},
+  '火焰爆弹':{mul:1.6,mp:14,cd:4,lift:0,effect:'灼烧'},'暗夜飞影':{mul:1.3,mp:11,cd:3,lift:0,effect:'诅咒'},
+  '普通攻击':{mul:1.0,mp:0,cd:1,lift:0,effect:''},'治愈术':{mul:0,mp:15,cd:8,lift:0,effect:'治疗'},
+  '圣光弹':{mul:1.4,mp:12,cd:4,lift:0,effect:'光属性'},'净化':{mul:0,mp:10,cd:10,lift:0,effect:'驱散'},
+  '背摔':{mul:1.6,mp:12,cd:5,lift:1,effect:'抓取'},'抛投':{mul:1.4,mp:10,cd:4,lift:1,effect:'抓取'},
+  '手里剑':{mul:1.2,mp:8,cd:3,lift:0,effect:''},'影分身术':{mul:0,mp:15,cd:10,lift:0,effect:'分身'},
+  '诅咒之箭':{mul:1.3,mp:10,cd:3,lift:0,effect:'诅咒'},'暗影波动':{mul:1.5,mp:14,cd:4,lift:0,effect:'暗属性'},
+  '升天阵':{mul:1.6,mp:14,cd:5,lift:3,effect:'浮空'},'落雷符':{mul:1.8,mp:16,cd:5,lift:1,effect:'感电'},
+  '气波弹':{mul:1.2,mp:8,cd:2,lift:0,effect:''},'念气罩':{mul:0,mp:20,cd:12,lift:0,effect:'护盾'},
+  '板砖':{mul:1.5,mp:10,cd:4,lift:0,effect:'眩晕'},'锁喉':{mul:1.3,mp:10,cd:5,lift:0,effect:'抓取'},
+  '冲锋':{mul:1.8,mp:15,cd:6,lift:1,effect:'击退'},'盾击':{mul:1.4,mp:12,cd:4,lift:0,effect:'眩晕'}
+};
+
+// 怪物数据（60+种，精简版）
+const MONSTER_DATA = {
+  '哥布林':{hp:115,atk:18,def:5,level:6,exp:45,gold:3,skills:['挥棒','重击'],type:'普通'},
+  '哥布林投石手':{hp:130,atk:20,def:6,level:7,exp:50,gold:3,skills:['投石'],type:'普通'},
+  '暗夜猫妖':{hp:1225,atk:84,def:32,level:10,exp:840,gold:50,skills:['爪击','暗影突袭','狂暴'],type:'BOSS-隐藏'},
+  '毒蜘蛛':{hp:190,atk:30,def:10,level:11,exp:80,gold:6,skills:['撕咬·毒'],type:'普通'},
+  '吐网蜘蛛':{hp:210,atk:33,def:11,level:12,exp:90,gold:6,skills:['吐网'],type:'普通'},
+  '孵化小蜘蛛':{hp:230,atk:36,def:12,level:13,exp:100,gold:7,skills:['撕咬'],type:'普通'},
+  '蜘蛛王':{hp:1620,atk:105,def:42,level:15,exp:1200,gold:80,skills:['喷毒','吐网','召唤小蜘蛛'],type:'BOSS-普通'},
+  '蜘蛛领主':{hp:1890,atk:126,def:49,level:15,exp:1440,gold:90,skills:['孵化蜘蛛卵','毒雾光环'],type:'BOSS-隐藏'},
+  '蜘蛛战士':{hp:1890,atk:126,def:49,level:15,exp:1440,gold:90,skills:['狂暴爪击','连击'],type:'BOSS-隐藏'},
+  '蜘蛛精':{hp:1890,atk:126,def:49,level:15,exp:1440,gold:90,skills:['腐蚀毒液'],type:'BOSS-隐藏'},
+  '哥布林战士':{hp:380,atk:60,def:20,level:21,exp:200,gold:15,skills:['挥棒','重击'],type:'普通'},
+  '哥布林弓箭手':{hp:400,atk:63,def:21,level:22,exp:210,gold:16,skills:['射击'],type:'普通'},
+  '冰元素':{hp:420,atk:66,def:22,level:23,exp:220,gold:17,skills:['冰霜箭'],type:'普通'},
+  '哥布林巡守':{hp:2640,atk:173,def:69,level:24,exp:2300,gold:144,skills:['重击','战吼'],type:'BOSS-普通'},
+  '冰霜塞恩':{hp:2760,atk:180,def:72,level:25,exp:2400,gold:160,skills:['冰霜新星','寒冰箭'],type:'BOSS-普通'},
+  '白狼':{hp:3220,atk:216,def:84,level:25,exp:2880,gold:200,skills:['爪击','撕咬','冰霜咆哮'],type:'BOSS-隐藏'},
+  '白巫女':{hp:3220,atk:216,def:84,level:25,exp:2880,gold:200,skills:['暴风雪','冰霜护盾'],type:'BOSS-隐藏'},
+  '哥布林商人洛林':{hp:6000,atk:300,def:80,level:20,exp:6000,gold:500,skills:['投掷','召唤哥布林'],type:'野图BOSS'},
+  '僵尸':{hp:440,atk:69,def:23,level:24,exp:230,gold:18,skills:['爪击','重击'],type:'普通'},
+  '骷髅兵':{hp:460,atk:72,def:24,level:25,exp:240,gold:20,skills:['挥刀'],type:'普通'},
+  '骷髅弓箭手':{hp:460,atk:72,def:24,level:25,exp:240,gold:20,skills:['射箭'],type:'普通'},
+  '骷髅法师':{hp:480,atk:75,def:25,level:26,exp:260,gold:22,skills:['暗影箭','黑暗诅咒'],type:'普通'},
+  '墓穴看守者':{hp:1440,atk:135,def:63,level:26,exp:1040,gold:66,skills:['黑暗护盾','召唤自爆骷髅'],type:'精英'},
+  '丧尸贝利':{hp:3000,atk:195,def:78,level:27,exp:2800,gold:192,skills:['重击','瘟疫光环'],type:'BOSS-普通'},
+  '墓穴领主':{hp:3000,atk:195,def:78,level:27,exp:2800,gold:192,skills:['召唤亡灵','暗影波'],type:'BOSS-普通'},
+  '吸血鬼骑士格罗':{hp:3500,atk:234,def:91,level:27,exp:3360,gold:240,skills:['吸血爪击','蝙蝠群'],type:'BOSS-隐藏'},
+  '腐骨羊':{hp:3500,atk:234,def:91,level:27,exp:3360,gold:240,skills:['腐蚀吐息','冲撞'],type:'BOSS-隐藏'},
+  '血枪手亚葛':{hp:6900,atk:360,def:100,level:25,exp:7200,gold:600,skills:['乱射','暴走','召唤亡灵'],type:'野图BOSS'},
+  '峡谷毒虫':{hp:580,atk:90,def:30,level:31,exp:340,gold:28,skills:['撕咬·毒'],type:'普通'},
+  '山匪刀手':{hp:600,atk:93,def:31,level:32,exp:360,gold:30,skills:['挥刀','连斩'],type:'普通'},
+  '山匪弓手':{hp:600,atk:93,def:31,level:32,exp:360,gold:30,skills:['射箭'],type:'普通'},
+  '影刀客阿红':{hp:4340,atk:288,def:112,level:33,exp:4560,gold:320,skills:['五重残影','剑影步','红血狂暴'],type:'BOSS-隐藏'},
+  '骸骨兵':{hp:640,atk:100,def:33,level:34,exp:400,gold:34,skills:['重击','盾击'],type:'普通'},
+  '亡魂士兵':{hp:660,atk:105,def:34,level:35,exp:420,gold:36,skills:['爪击','暗影斩'],type:'普通'},
+  '亡魂法师':{hp:660,atk:105,def:34,level:35,exp:420,gold:36,skills:['暗影波','恐惧术'],type:'普通'},
+  '流离领主':{hp:3960,atk:263,def:102,level:35,exp:4200,gold:288,skills:['斩击','召唤亡灵','暗影爆发'],type:'BOSS-普通'},
+  '熔岩兽人':{hp:740,atk:118,def:38,level:39,exp:500,gold:42,skills:['挥棒','火焰附加','重击'],type:'普通'},
+  '火元素':{hp:760,atk:120,def:39,level:40,exp:520,gold:44,skills:['火焰冲击','燃烧光环'],type:'普通'},
+  '炎魔统领':{hp:4800,atk:325,def:123,level:42,exp:5600,gold:384,skills:['重拳','火球','火焰雨','召唤火元素'],type:'BOSS-普通'},
+  '炎女巫卡修':{hp:11400,atk:480,def:120,level:40,exp:12000,gold:1000,skills:['火焰雨','炎爆术','熔岩护盾'],type:'野图BOSS'},
+  '水妖':{hp:820,atk:135,def:42,level:43,exp:580,gold:50,skills:['水击','减速'],type:'普通'},
+  '水元素':{hp:840,atk:140,def:43,level:44,exp:600,gold:52,skills:['水炮','水波冲击'],type:'普通'},
+  '淤泥怪':{hp:840,atk:140,def:43,level:44,exp:600,gold:52,skills:['黏着','减速'],type:'普通'},
+  '水之守卫':{hp:5160,atk:363,def:132,level:45,exp:6200,gold:440,skills:['控水','巨浪冲击','水之护盾'],type:'BOSS-普通'},
+  '古城亡灵':{hp:1040,atk:180,def:54,level:54,exp:860,gold:75,skills:['挥剑','斩击'],type:'普通'},
+  '石像守卫':{hp:3180,atk:333,def:138,level:55,exp:3600,gold:234,skills:['石拳重击','重组'],type:'精英'},
+  '骸骨战士':{hp:1340,atk:235,def:69,level:69,exp:1400,gold:115,skills:['重剑斩','盾击'],type:'普通'},
+  '骨龙杂兵':{hp:1340,atk:235,def:69,level:69,exp:1400,gold:115,skills:['爪击','龙息'],type:'普通'},
+  '守护者凯威':{hp:8160,atk:600,def:210,level:70,exp:14500,gold:960,skills:['重击','战吼','护盾'],type:'BOSS-普通'},
+  '骨龙拉尔顿':{hp:8160,atk:600,def:210,level:70,exp:14500,gold:960,skills:['龙息','龙爪扫击','龙翼冲击'],type:'BOSS-普通'},
+  '陵墓亡灵':{hp:1340,atk:235,def:69,level:69,exp:1400,gold:115,skills:['爪击','暗影斩'],type:'普通'},
+  '石像卫士':{hp:4080,atk:432,def:175,level:70,exp:5800,gold:360,skills:['石拳连击','硬化'],type:'精英'},
+  '守墓人艾姆谢特':{hp:8160,atk:600,def:210,level:70,exp:14500,gold:960,skills:['召唤石像','亡灵法术','诅咒'],type:'BOSS-普通'},
+  '山贼喽啰':{hp:1440,atk:255,def:74,level:74,exp:1650,gold:140,skills:['挥刀','连斩'],type:'普通'},
+  '山贼弓手':{hp:1440,atk:255,def:74,level:74,exp:1650,gold:140,skills:['射箭'],type:'普通'},
+  '山寨护卫':{hp:4380,atk:468,def:188,level:75,exp:6800,gold:435,skills:['盾击','重甲防御'],type:'精英'},
+  '印山先锋季狼':{hp:8760,atk:650,def:225,level:75,exp:17000,gold:1160,skills:['高速斩击','突进','流血'],type:'BOSS-普通'},
+  '护寨统领沙豹':{hp:8760,atk:650,def:225,level:75,exp:17000,gold:1160,skills:['重击','怒吼','盾墙'],type:'BOSS-普通'},
+  '军师冷鹰':{hp:8760,atk:650,def:225,level:75,exp:17000,gold:1160,skills:['枪击','诡雷','烟雾弹'],type:'BOSS-普通'},
+  '副寨主人熊':{hp:8760,atk:650,def:225,level:75,exp:17000,gold:1160,skills:['巨力重击','冲撞','狂暴'],type:'BOSS-普通'},
+  '寨主印山虎':{hp:8760,atk:650,def:225,level:75,exp:17000,gold:1160,skills:['综合全技能','召唤护卫'],type:'BOSS-普通'}
+};
+
+// 副本数据（13个）
+const DUNGEON_DATA = [
+  {id:'dun_green',name:'格林之森',level:'5-10',players:'1-2人',monsters:['哥布林','哥布林投石手','暗夜猫妖'],desc:'新手引导·简单'},
+  {id:'dun_spider',name:'蜘蛛洞穴',level:'11-15',players:'2-3人',monsters:['毒蜘蛛','吐网蜘蛛','孵化小蜘蛛','蜘蛛王','蜘蛛领主','蜘蛛战士','蜘蛛精'],desc:'毒+网双重异常'},
+  {id:'dun_frost',name:'冰霜森林',level:'21-25',players:'3-4人',monsters:['哥布林战士','哥布林弓箭手','冰元素','哥布林巡守','冰霜塞恩','白狼','白巫女','哥布林商人洛林'],desc:'冰系减速+冰冻'},
+  {id:'dun_boneyard',name:'埋骨之地',level:'24-27',players:'3-4人',monsters:['僵尸','骷髅兵','骷髅弓箭手','骷髅法师','墓穴看守者','丧尸贝利','墓穴领主','吸血鬼骑士格罗','腐骨羊','血枪手亚葛'],desc:'亡灵召唤+诅咒'},
+  {id:'dun_canyon',name:'一线峡谷',level:'31-33',players:'4人',monsters:['峡谷毒虫','山匪刀手','山匪弓手','影刀客阿红'],desc:'狭窄地形+偷袭'},
+  {id:'dun_ruins',name:'流离之地',level:'34-35',players:'4人',monsters:['骸骨兵','亡魂士兵','亡魂法师','流离领主'],desc:'亡魂波次+暗影AOE'},
+  {id:'dun_fire',name:'烈焰森林',level:'39-42',players:'4-5人',monsters:['熔岩兽人','火元素','炎魔统领','炎女巫卡修'],desc:'火系灼烧+持续掉血'},
+  {id:'dun_lake',name:'千波湖',level:'43-45',players:'4-5人',monsters:['水妖','水元素','淤泥怪','水之守卫'],desc:'水减速+击飞'},
+  {id:'dun_ancient',name:'迷罗古城',level:'54-55',players:'10-20人',monsters:['古城亡灵','石像守卫','守墓人艾姆谢特'],desc:'百人协作+石像重组'},
+  {id:'dun_bone',name:'骨龙深渊',level:'69-70',players:'10人',monsters:['骸骨战士','骨龙杂兵','守护者凯威','骨龙拉尔顿'],desc:'龙息+护盾机制'},
+  {id:'dun_sky',name:'空中陵墓',level:'69-70',players:'10-20人',monsters:['陵墓亡灵','石像卫士','守墓人艾姆谢特'],desc:'亡灵+石像混合'},
+  {id:'dun_bandit',name:'印山贼寨',level:'74-75',players:'10人',monsters:['山贼喽啰','山贼弓手','山寨护卫','印山先锋季狼','护寨统领沙豹','军师冷鹰','副寨主人熊','寨主印山虎'],desc:'五Boss连战'},
+  {id:'dun_final',name:'终焉古墟',level:'76-80',players:'5-8人',monsters:['墟溟之主·虚影','墟溟主宰'],desc:'终极机制+Boss连战'}
+];
+
+// ==================== 游戏状态 ====================
+let G = {
+  pid: '',
+  identity: '',
+  level: 1,
+  silver: 0,
+  aw: 0, al: 0,
+  loc: '第十区·新手村',
+  guild: '未加入',
+  exp: 0, expMax: 100,
+  hp: 100, hpMax: 100,
+  mp: 50, mpMax: 50,
+  class: '未选择',
+  relations: {
+    '叶修（君莫笑）': '陌生',
+    '苏沐橙': '陌生',
+    '陈果': '陌生',
+    '唐柔': '陌生',
+    '黄少天': '陌生',
+    '韩文清': '陌生',
+    '张新杰': '陌生'
+  },
+  weapon: {name:'新手木剑', grade:'白'},
+  armor: {name:'布衣', grade:'白'},
+  skills: [],
+  main: [
+    {name:'开荒·第十区', status:'进行中', content:'练级到20级转职，探索格林之森和蜘蛛洞穴', reward:'等级推进+转职资格'},
+    {name:'神之领域', status:'未解锁', content:'达到50级，通过挑战任务进入神之领域', reward:'新地图+高级装备'},
+    {name:'职业联赛', status:'未解锁', content:'组建或加入战队，冲击荣耀联赛', reward:'终极荣耀'}
+  ],
+  daily: {name:'练级', status:'可执行', content:'完成一次副本挑战或野外战斗', reward:'经验+银币'},
+  log: '第十区开服，世界频道人声鼎沸',
+  status: '正常',
+  started: false,
+  chatHistory: []
+};
+
+let pendingAction = null;
+let pendingIdentity = false;
+
+function $(id){ return document.getElementById(id); }
+
+// ==================== 角色卡刷新 ====================
+function refreshCharCard(){
+  if(!G.started || !G.pid){
+    $('charName').textContent = '未创建角色';
+    $('charIdentity').textContent = '—';
+    $('charLv').textContent = 'Lv 1';
+    $('avatar').textContent = '?';
+    $('expBar').style.width = '0%';
+    $('expText').textContent = '0/100';
+    $('silverDisp').textContent = '0';
+    $('arenaDisp').textContent = '0胜0负';
+    $('locDisp').textContent = '第十区·新手村';
+    $('guildDisp').textContent = '未加入';
+    $('weaponDisp').textContent = '白装';
+    $('weaponGrade').textContent = '';
+    $('armorDisp').textContent = '白装';
+    $('armorGrade').textContent = '';
+    $('hpText').textContent = G.hpMax + '/' + G.hpMax;
+    $('mpText').textContent = G.mpMax + '/' + G.mpMax;
+    $('hpBar').style.width = '100%';
+    $('mpBar').style.width = '100%';
+    return;
+  }
+  $('charName').textContent = G.pid;
+  $('charIdentity').textContent = G.class + ' · ' + (G.identity || '冒险者');
+  $('charLv').textContent = 'Lv ' + G.level;
+  $('avatar').textContent = G.pid.charAt(0).toUpperCase();
+  const expPct = Math.min(100, Math.round(G.exp / G.expMax * 100));
+  $('expBar').style.width = expPct + '%';
+  $('expText').textContent = G.exp + '/' + G.expMax;
+  $('silverDisp').textContent = G.silver;
+  $('arenaDisp').textContent = G.aw + '胜' + G.al + '负';
+  $('locDisp').textContent = G.loc;
+  $('guildDisp').textContent = G.guild;
+  $('weaponDisp').textContent = G.weapon.name;
+  $('weaponGrade').textContent = G.weapon.grade;
+  $('armorDisp').textContent = G.armor.name;
+  $('armorGrade').textContent = G.armor.grade;
+  $('hpText').textContent = Math.floor(G.hp) + '/' + G.hpMax;
+  $('mpText').textContent = Math.floor(G.mp) + '/' + G.mpMax;
+  $('hpBar').style.width = Math.min(100, Math.round(G.hp / G.hpMax * 100)) + '%';
+  $('mpBar').style.width = Math.min(100, Math.round(G.mp / G.mpMax * 100)) + '%';
+  updRoster();
+}
+
+// ==================== 消息系统 ====================
+function addMsg(type, spk, content){
+  if(!content && spk){ content = spk; spk = ''; }
+  const s = $('story');
+  const d = document.createElement('div');
+  if(type === 'narr'){ d.className='narr'; d.textContent=content; }
+  else if(type === 'dlg'){ d.className='dlg'; d.innerHTML='<span class="spk">'+spk+'：</span>'+content; }
+  else if(type === 'wc'){ d.className='wc'; d.innerHTML='<span class="tag">世界</span><b>'+spk+'：</b>'+content; }
+  else if(type === 'sys'){ d.className='sys-msg'; d.textContent='⚡ ' + content; }
+  else if(type === 'loading'){ d.className='loading-msg'; d.textContent='⏳ ' + content; d.id='loadingMsg'; }
+  s.appendChild(d);
+  s.scrollTop = s.scrollHeight;
+}
+
+function removeLoading(){
+  const el = document.getElementById('loadingMsg');
+  if(el) el.remove();
+}
+
+function setBar(){
+  const bars = document.querySelectorAll('.bar');
+  const txt = '【Lv '+G.level+'｜银币 '+G.silver+'｜竞技场 '+G.aw+'胜'+G.al+'负｜'+G.loc+'】';
+  if(bars.length > 0){
+    bars[bars.length-1].textContent = txt;
+  } else {
+    const s = $('story');
+    const d = document.createElement('div');
+    d.className = 'bar';
+    d.textContent = txt;
+    s.appendChild(d);
+    s.scrollTop = s.scrollHeight;
+  }
+  refreshCharCard();
+}
+
+// ==================== 选项系统 ====================
+function showOpts(opts){
+  const w = $('optionsWrap');
+  w.style.display = 'flex';
+  w.innerHTML = '';
+  opts.forEach((text, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = text;
+    b.onclick = () => {
+      w.style.display='none'; w.innerHTML='';
+      if(i === 3){
+        pendingAction = 'waitFree';
+        addMsg('sys', '自由行动：在输入框输入你想做的事');
+        $('userInput').focus();
+      } else {
+        sendToAI(text);
+      }
+    };
+    w.appendChild(b);
+  });
+}
+
+function hideOpts(){ const w=$('optionsWrap'); w.style.display='none'; w.innerHTML=''; }
+
+// ==================== 系统提示词 ====================
+function buildSystemPrompt(){
+  const classDesc = G.class !== '未选择' ? CLASS_DATA[G.class]?.desc || '' : '尚未转职';
+  const skillList = G.skills.length > 0 ? G.skills.join('、') : '基础攻击';
+  const relStr = Object.entries(G.relations).filter(([_,v])=>v!=='陌生').map(([k,v])=>k+'：'+v).join('；') || '暂无熟人';
+
+  return `你是《全职高手》第十区人生模拟器的游戏引擎。玩家正在荣耀第十区冒险。
+
+【玩家档案】
+ID：${G.pid}
+职业：${G.class}（${classDesc}）
+等级：${G.level}级
+银币：${G.silver}
+竞技场：${G.aw}胜${G.al}负
+位置：${G.loc}
+公会：${G.guild}
+HP：${Math.floor(G.hp)}/${G.hpMax}
+MP：${Math.floor(G.mp)}/${G.mpMax}
+技能：${skillList}
+已认识的角色：${relStr}
+
+【世界规则】
+- 荣耀有六大系24职业，20级转职，50级觉醒。
+- 玩家是普通玩家，操作水平略高于普通玩家，但不如职业选手。
+- NPC必须按原著性格说话，不能OOC。
+- NPC只知道亲眼所见的事，不知道玩家"前世"。
+- 玩家行动有真实后果。越级打怪可能死。
+- 君莫笑=叶修这件事，玩家暂时不知道。
+- 世界频道会有其他玩家的消息，包括君莫笑首杀隐藏BOSS等事件。
+- 副本有格林之森、蜘蛛洞穴、冰霜森林、埋骨之地、一线峡谷、流离之地、烈焰森林、千波湖、迷罗古城、骨龙深渊、空中陵墓、印山贼寨、终焉古墟。
+
+【怪物数据参考】
+你生成的剧情中，玩家可能遇到的怪物来自这个列表，请合理使用：
+${Object.keys(MONSTER_DATA).slice(0, 20).join('、')}等。
+
+【输出格式】
+你必须输出JSON，结构如下：
+{
+  "narration": ["旁白1", "旁白2", "旁白3"],
+  "dialogues": [{"speaker": "说话人", "content": "台词"}],
+  "world": [{"speaker": "世界频道ID", "content": "消息"}],
+  "status_change": {
+    "level": null,
+    "silver": null,
+    "exp": null,
+    "hp": null,
+    "mp": null,
+    "loc": null
+  },
+  "options": ["选项1", "选项2", "选项3", "自由行动（做任何你想做的事）"]
+}
+- narration最多3条，每条不超过35字。
+- dialogues最多3条，每条台词不超过25字。
+- world最多2条，展现世界频道的热闹。
+- status_change只有数值变化时才给值，否则null。
+- options必须4个，第4个永远是"自由行动（做任何你想做的事）"。
+- 输出必须只包含JSON，不要有其他内容。
+- 剧情要推进：让玩家遇到怪物、NPC、事件，逐步推进等级和故事。`;
+}
+
+// ==================== AI调用 ====================
+async function sendToAI(playerAction){
+  $('sendBtn').disabled = true;
+  addMsg('loading', 'AI 正在生成剧情...');
+
+  const sysPrompt = buildSystemPrompt();
+
+  const messages = [
+    { role: 'system', content: sysPrompt }
+  ];
+
+  const recent = G.chatHistory.slice(-10);
+  messages.push(...recent);
+  messages.push({ role: 'user', content: playerAction });
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + API_KEY
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: messages,
+        max_tokens: 1200,
+        temperature: 0.8
+      })
+    });
+
+    const data = await res.json();
+    removeLoading();
+    $('sendBtn').disabled = false;
+
+    if(data.choices && data.choices[0] && data.choices[0].message){
+      const content = data.choices[0].message.content;
+      parseAIResponse(content, playerAction);
+    } else {
+      addMsg('sys', 'AI返回异常，请重试');
+      console.error(data);
+    }
+  } catch(err) {
+    removeLoading();
+    $('sendBtn').disabled = false;
+    addMsg('sys', '请求失败：' + err.message);
+    console.error(err);
+  }
+}
+
+function parseAIResponse(content, playerAction){
+  G.chatHistory.push({ role: 'user', content: playerAction });
+  G.chatHistory.push({ role: 'assistant', content: content });
+  if(G.chatHistory.length > 30) G.chatHistory = G.chatHistory.slice(-30);
+
+  let data;
+  try {
+    let cleaned = content.trim();
+    if(cleaned.startsWith('```json')) cleaned = cleaned.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+    if(cleaned.startsWith('```')) cleaned = cleaned.replace(/```\n?/g, '');
+    data = JSON.parse(cleaned);
+  } catch(e) {
+    // 不是JSON，直接显示
+    addMsg('narr', content);
+    setBar();
+    showOpts([
+      '继续探索', '尝试大胆的举动', '停下来观察', '自由行动'
+    ]);
+    return;
+  }
+
+  if(data.narration && Array.isArray(data.narration)){
+    data.narration.forEach(n => addMsg('narr', n));
+  }
+  if(data.dialogues && Array.isArray(data.dialogues)){
+    data.dialogues.forEach(d => {
+      if(d && d.speaker && d.content) addMsg('dlg', d.speaker, d.content);
+    });
+  }
+  if(data.world && Array.isArray(data.world)){
+    data.world.forEach(w => {
+      if(w && w.speaker && w.content) addMsg('wc', w.speaker, w.content);
+    });
+  }
+
+  if(data.status_change){
+    const sc = data.status_change;
+    if(sc.level && sc.level > G.level){
+      addMsg('sys', '🎉 升级！现在是Lv.' + sc.level + '！');
+      G.level = sc.level;
+      G.hp = G.hpMax;
+      G.mp = G.mpMax;
+    }
+    if(sc.level && sc.level <= G.level) G.level = sc.level;
+    if(sc.silver !== null && sc.silver !== undefined) G.silver = sc.silver;
+    if(sc.exp !== null && sc.exp !== undefined) G.exp = sc.exp;
+    if(sc.hp !== null && sc.hp !== undefined) G.hp = Math.min(G.hpMax, sc.hp);
+    if(sc.mp !== null && sc.mp !== undefined) G.mp = Math.min(G.mpMax, sc.mp);
+    if(sc.loc) G.loc = sc.loc;
+  }
+
+  setBar();
+
+  if(data.options && Array.isArray(data.options) && data.options.length >= 4){
+    showOpts(data.options.slice(0, 4));
+  } else {
+    showOpts([
+      '继续探索', '尝试大胆的举动', '停下来观察周围', '自由行动（做任何你想做的事）'
+    ]);
+  }
+}
+
+// ==================== 输入处理 ====================
+function sendInput(){
+  const inp = $('userInput');
+  const t = inp.value.trim();
+  if(!t) return;
+  inp.value = '';
+
+  const trigs = ['荣耀','任务','提示','存档','读取存档'];
+  if(trigs.includes(t)){
+    quickWord(t);
+    return;
+  }
+
+  if(pendingAction === 'awaitClass'){
+    setClass(t);
+    return;
+  }
+
+  if(pendingAction === 'customIdentity'){
+    G.identity = t;
+    pendingAction = null;
+    refreshCharCard();
+    addMsg('narr', '你的身份：' + t);
+    afterIdentity();
+    return;
+  }
+
+  if(pendingAction === 'waitFree'){
+    pendingAction = null;
+    sendToAI(t);
+    return;
+  }
+
+  sendToAI(t);
+}
+
+// ==================== 开场 ====================
+function init(){
+  addMsg('narr', '⚔ 休息一年，然后回来。');
+  addMsg('narr', '第十区开服，几十万玩家同一秒挤进新手村。');
+  addMsg('narr', '你坐在电脑前，光标停在「创建角色」的界面上。');
+  showOpts([
+    '【A】第一次玩荣耀的新人', 
+    '【B】老玩家转区，带着经验', 
+    '【C】大公会雇佣的玩家', 
+    '【D】自定义你的来路'
+  ]);
+}
+
+// 处理选项点击（覆盖默认）
+document.addEventListener('click', function(e){
+  if(e.target.classList && e.target.classList.contains('opt')){
+    const text = e.target.textContent;
+    if(text.includes('【A】')){ 
+      e.target.parentElement.style.display='none'; e.target.parentElement.innerHTML='';
+      G.identity='新人玩家'; G.started=true; refreshCharCard(); 
+      addMsg('narr','你选择了【第一次玩荣耀的新人】。'); afterIdentity(); 
+    } else if(text.includes('【B】')){
+      e.target.parentElement.style.display='none'; e.target.parentElement.innerHTML='';
+      G.identity='老玩家转区'; G.started=true; refreshCharCard(); 
+      addMsg('narr','你选择了【老玩家转区】。'); afterIdentity();
+    } else if(text.includes('【C】')){
+      e.target.parentElement.style.display='none'; e.target.parentElement.innerHTML='';
+      G.identity='大公会雇佣兵'; G.started=true; refreshCharCard(); 
+      addMsg('narr','你选择了【大公会雇佣兵】。'); afterIdentity();
+    } else if(text.includes('【D】')){
+      e.target.parentElement.style.display='none'; e.target.parentElement.innerHTML='';
+      pendingAction='customIdentity';
+      addMsg('sys','请输入你的自定义身份（在输入框打字）');
+      $('userInput').focus();
+    }
+  }
+});
+
+function afterIdentity(){
+  addMsg('narr', '六大系24职业图标滚动而过。20级之后才有资格转职。');
+  addMsg('narr', '新手村灯火通明，任务NPC被围得水泄不通。');
+  pendingAction = 'awaitId';
+  addMsg('sys', '你的角色叫什么名字？（在输入框输入）');
+  $('userInput').focus();
+}
+
+function setPid(id){
+  id = id.trim();
+  if(!id){ addMsg('sys','名字不能为空'); return; }
+  G.pid = id;
+  pendingAction = 'awaitClass';
+  refreshCharCard();
+  addMsg('sys', '选择你的初始职业（在输入框输入职业名）');
+  addMsg('sys', '可选：战斗法师、剑客、枪炮师、元素法师、神枪手、拳法家、牧师、术士');
+  $('userInput').focus();
+}
+
+function setClass(cls){
+  cls = cls.trim();
+  if(!CLASS_DATA[cls]){
+    addMsg('sys', '职业不存在，可选：战斗法师、剑客、枪炮师、元素法师、神枪手、拳法家、牧师、术士');
+    return;
+  }
+  G.class = cls;
+  const cd = CLASS_DATA[cls];
+  G.skills = cd.starterSkills.slice();
+  G.hpMax = cd.hp;
+  G.hp = cd.hp;
+  G.mpMax = cd.mp;
+  G.mp = cd.mp;
+  G.weapon = {name: cd.desc.split('·')[0] || '武器', grade:'白'};
+  pendingAction = null;
+  refreshCharCard();
+  addMsg('wc', '系统公告', '玩家【'+G.pid+'】进入第十区！职业：'+cls);
+  addMsg('narr', '你握紧新手武器，走出新手村。');
+  addMsg('narr', '格林之森的晨雾中，第一只哥布林正在游荡。');
+  setBar();
+  sendToAI('（开局）我走出新手村，准备开始我的荣耀冒险。请推进剧情。');
+}
+
+function setBar(){
+  refreshCharCard();
+}
+
+// ==================== 快速指令 ====================
+function quickWord(w){
+  switch(w){
+    case '荣耀': showGloryPanel(); break;
+    case '任务': showQuestPanel(); break;
+    case '提示': showHintPanel(); break;
+    case '存档': saveGame(); break;
+    case '读取存档': loadGame(); break;
+  }
+}
+
+// ==================== 面板 ====================
+function showGloryPanel(){
+  const rel = Object.entries(G.relations).filter(([_,v])=>v!=='陌生').map(([k,v])=>k+'：'+v).join('　') || '暂无熟人';
+  const h = `<h2>『荣耀面板』</h2>
+  <div style="border:1px solid rgba(196,160,64,0.4);border-radius:8px;padding:18px;background:rgba(196,160,64,0.04);">
+    <p style="font-family:var(--font-d);font-size:19px;font-weight:700;color:var(--red-deep);margin-bottom:10px;">${G.pid||'未设定'} <span style="font-size:12px;color:var(--text-2);font-weight:400;">· ${G.class} · Lv${G.level}</span></p>
+    <p style="color:var(--text-2);margin-bottom:6px;font-size:12px;">◈ 身份：${G.identity||'冒险者'}</p>
+    <p style="color:var(--text-2);margin-bottom:6px;font-size:12px;">◈ 位置：${G.loc}</p>
+    <p style="color:var(--text-2);margin-bottom:6px;font-size:12px;">◈ 银币：<b style="color:var(--gold-deep);">${G.silver}</b></p>
+    <p style="color:var(--text-2);margin-bottom:6px;font-size:12px;">◈ 竞技场：${G.aw}胜${G.al}负</p>
+    <p style="color:var(--text-2);margin-bottom:6px;font-size:12px;">◈ 公会：${G.guild}</p>
+    <p style="color:var(--text-2);margin-bottom:6px;font-size:12px;">◈ HP：${Math.floor(G.hp)}/${G.hpMax}　MP：${Math.floor(G.mp)}/${G.mpMax}</p>
+    <p style="color:var(--text-2);margin-bottom:6px;font-size:12px;">◈ 装备：${G.weapon.name}（${G.weapon.grade}）｜${G.armor.name}（${G.armor.grade}）</p>
+    <p style="color:var(--text-2);margin-bottom:6px;font-size:12px;">◈ 技能：${G.skills.join('｜') || '基础攻击'}</p>
+    <hr style="border-color:var(--border);margin:10px 0;">
+    <p style="font-size:11px;color:var(--text-3);margin-bottom:4px;">关系：${rel}</p>
+    <p style="font-size:11px;color:var(--text-3);">状态：<span style="color:var(--red);">${G.status}</span></p>
+  </div>`;
+  showPanel(h);
+}
+
+function showQuestPanel(){
+  let h = '<h2>【任务面板】</h2><div style="margin-bottom:12px;"><h3 style="color:var(--red-deep);font-size:13px;margin-bottom:6px;">主线</h3>';
+  G.main.forEach(q=>{
+    const sc = q.status==='进行中' ? 'var(--red)' : 'var(--text-3)';
+    h += `<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:6px;">
+      <p style="font-weight:600;color:var(--red-deep);font-size:12px;">${q.name} <span style="color:${sc};font-size:10px;">【${q.status}】</span></p>
+      <p style="color:var(--text-2);font-size:11px;margin-top:3px;">${q.content}</p>
+      <p style="color:var(--text-3);font-size:11px;">奖励：${q.reward}</p>
+    </div>`;
+  });
+  h += '</div><div><h3 style="color:var(--red-deep);font-size:13px;margin-bottom:6px;">日常</h3>';
+  h += `<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:10px;">
+    <p style="font-weight:600;color:var(--red-deep);font-size:12px;">${G.daily.name} <span style="color:var(--text-3);font-size:10px;">【${G.daily.status}】</span></p>
+    <p style="color:var(--text-2);font-size:11px;margin-top:3px;">${G.daily.content}</p>
+    <p style="color:var(--text-3);font-size:11px;">奖励：${G.daily.reward}</p>
+  </div></div>`;
+  showPanel(h);
+}
+
+function showHintPanel(){
+  const h = `<h2>【提示】</h2>
+  <div style="font-size:12px;color:var(--text-2);line-height:2;">
+    <p style="color:var(--red-deep);font-weight:600;margin-bottom:4px;">🎯 目标</p>
+    <p>• 练级到20级，完成转职</p>
+    <p>• 挑战副本，获取装备</p>
+    <p>• 关注世界频道，君莫笑出没</p>
+    <p style="color:var(--red-deep);font-weight:600;margin:10px 0 4px;">📌 副本列表</p>
+    ${DUNGEON_DATA.map(d => `<p>• ${d.name}（${d.level}）${d.desc}</p>`).join('')}
+    <p style="color:var(--red-deep);font-weight:600;margin:10px 0 4px;">⚙️ 操作</p>
+    <p>• 输入「荣耀」查看面板</p>
+    <p>• 输入「存档」保存进度</p>
+    <p>• 选择「自由行动」后自定义输入</p>
+  </div>`;
+  showPanel(h);
+}
+
+function showPanel(h){
+  $('panelBody').innerHTML = h + '<button class="close" onclick="$(\'overlay\').style.display=\'none\'">关闭</button>';
+  $('overlay').style.display = 'flex';
+}
+
+function closeModal(e){
+  if(e.target === $('overlay') || e.target.className === 'close'){
+    $('overlay').style.display = 'none';
+  }
+}
+
+function updRoster(){
+  const roles = Object.entries(G.relations).map(([n, s]) =>
+    `<div class="roster-card"><div class="rname">${n}</div><div class="rrel">关系：<span>${s}</span></div></div>`
+  ).join('');
+  $('rosterCards').innerHTML = roles || '<div style="font-size:10px;color:var(--text-3);text-align:center;">尚未结识</div>';
+}
+
+// ==================== 存档 ====================
+function saveGame(){
+  try {
+    localStorage.setItem('glory_full_save', JSON.stringify(G));
+    addMsg('sys', '游戏已保存');
+  } catch(e) {
+    addMsg('sys', '存档失败：' + e.message);
+  }
+}
+
+function loadGame(){
+  try {
+    const s = localStorage.getItem('glory_full_save');
+    if(!s){ addMsg('sys', '没有找到存档'); return; }
+    const data = JSON.parse(s);
+    Object.assign(G, data);
+    G.started = true;
+    pendingAction = null;
+    addMsg('sys', '存档已读取，欢迎回来！');
+    setBar();
+    updRoster();
+    refreshCharCard();
+    showGloryPanel();
+  } catch(e) {
+    addMsg('sys', '读档失败：' + e.message);
+  }
+}
+
+function resetGame(){
+  if(confirm('确定重新开始？所有进度将丢失！')){
+    localStorage.removeItem('glory_full_save');
+    location.reload();
+  }
+}
+
+// ==================== 启动 ====================
+refreshCharCard();
+updRoster();
+init();
+</script>
+</body>
+</html>
