@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="color-scheme" content="light">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>荣耀 · 第十区</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
+:root {
+  --bg: #f5f3f0;
+  --surface: #ffffff;
+  --surface-2: #faf9f7;
+  --border: #e5e0d8;
+  --border-strong: #d5cec2;
+  --red: #a82020;
+  --red-deep: #7e1818;
+  --red-soft: rgba(168,32,32,0.06);
+  --gold: #c4a040;
+  --gold-deep: #9a7820;
+  --gold-soft: rgba(196,160,64,0.1);
+  --hp: #c0392b;
+  --mp: #2980b9;
+  --text: #2a2420;
+  --text-2: #5a524a;
+  --text-3: #9a9084;
+  --font-d: 'Noto Serif SC', serif;
+  --font-s: 'Noto Sans SC', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-s);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 顶部导航 */
+.top-nav {
+  height: 56px;
+  background: linear-gradient(120deg, #7e1818 0%, #a82020 40%, #b82828 60%, #7e1818 100%);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 20;
+  box-shadow: 0 2px 12px rgba(126,24,24,0.2);
+}
+.top-nav::before {
+  content:'';
+  position:absolute; top:0; left:0; right:0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 10%, var(--gold) 40%, var(--gold) 60%, transparent 90%);
+  opacity: 0.6;
+}
+.nav-logo { font-family: var(--font-d); font-size: 22px; font-weight: 900; color: #fff; letter-spacing: 8px; text-shadow: 0 1px 4px rgba(0,0,0,0.3); }
+.nav-sub { font-size: 8px; color: rgba(255,255,255,0.5); letter-spacing: 5px; margin-left: 10px; margin-top: 8px; }
+.nav-spacer { flex: 1; }
+.nav-actions { display: flex; gap: 6px; }
+.nav-actions button {
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.85); padding: 7px 14px; border-radius: 4px;
+  cursor: pointer; font-size: 11px; letter-spacing: 2px; font-family: var(--font-s); transition: all 0.2s;
+}
+.nav-actions button:hover { background: rgba(255,255,255,0.2); color: #fff; }
+
+/* 主体 */
+.main { flex:1; display:flex; overflow:hidden; }
+
+/* 左侧角色面板 */
+.left-panel {
+  width: 240px; background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; flex-shrink: 0; overflow-y: auto;
+}
+.char-card { padding: 16px 14px; border-bottom: 1px solid var(--border); background: linear-gradient(180deg, #fdfcfa 0%, #faf9f7 100%); }
+.char-header { display: flex; gap: 12px; align-items: center; margin-bottom: 12px; }
+.char-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  background: linear-gradient(135deg, #3a2a18 0%, #5a4a28 100%);
+  border: 2px solid var(--gold); display: flex; align-items: center; justify-content: center;
+  font-size: 22px; color: var(--gold); flex-shrink: 0; box-shadow: 0 0 14px rgba(196,160,64,0.3);
+}
+.char-name { font-size: 15px; font-weight: 700; color: var(--text); letter-spacing: 1px; }
+.char-identity { font-size: 10px; color: var(--text-3); margin-top: 2px; }
+.char-level-badge {
+  display: inline-block; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: #fff; font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+  letter-spacing: 1px; margin-top: 4px;
+}
+.exp-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+.exp-label { font-size: 9px; color: var(--text-3); width: 22px; flex-shrink: 0; }
+.exp-bar-wrap { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.exp-bar { height: 100%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); border-radius: 3px; transition: width 0.5s ease; }
+.exp-text { font-size: 8px; color: var(--text-3); flex-shrink: 0; }
+.stat-row { display: flex; align-items: center; gap: 6px; margin-bottom: 5px; }
+.stat-icon { width: 22px; font-size: 9px; font-weight: 700; flex-shrink: 0; text-align: center; }
+.stat-icon.hp { color: var(--hp); }
+.stat-icon.mp { color: var(--mp); }
+.stat-bar-wrap { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+.stat-bar { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+.stat-bar.hp { background: linear-gradient(90deg, #8a2018, #d04030); }
+.stat-bar.mp { background: linear-gradient(90deg, #1a5a8a, #4090c0); }
+.stat-text { font-size: 8px; color: var(--text-3); flex-shrink: 0; min-width: 40px; text-align: right; }
+.res-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 4px 10px;
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+}
+.res-item { font-size: 10px; color: var(--text-2); display: flex; align-items: center; gap: 4px; }
+.res-item b { color: var(--text); font-weight: 600; }
+.equip-section { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+.equip-title { font-size: 9px; color: var(--text-3); letter-spacing: 3px; margin-bottom: 8px; }
+.equip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 8px; }
+.equip-slot {
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 4px;
+  padding: 5px 8px; font-size: 9px; color: var(--text-2); display: flex; align-items: center; gap: 4px;
+}
+.equip-slot .e-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.equip-slot .e-grade { font-size: 8px; color: var(--gold-deep); margin-left: auto; }
+.panel-nav { flex: 1; padding: 10px 8px; }
+.panel-nav .nav-section-title { font-size: 8px; color: var(--text-3); letter-spacing: 4px; padding: 8px 8px 4px; }
+.panel-nav button {
+  display: flex; align-items: center; gap: 8px; width: 100%;
+  background: none; border: none; padding: 10px 12px;
+  font-size: 12px; color: var(--text-2); cursor: pointer;
+  font-family: var(--font-s); letter-spacing: 1px; border-radius: 6px;
+  transition: all 0.2s; text-align: left;
+}
+.panel-nav button:hover { background: var(--red-soft); color: var(--red); }
+.panel-nav button.active { background: var(--red-soft); color: var(--red-deep); font-weight: 600; }
+
+/* 中央 */
+.content { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+.story-flow {
+  flex: 1; overflow-y: auto; padding: 24px 36px 16px;
+  display: flex; flex-direction: column; gap: 12px; scroll-behavior: smooth;
+}
+.narr { text-align: center; color: var(--text-3); font-size: 13px; line-height: 2; letter-spacing: 2px; font-weight: 300; padding: 2px 40px; }
+.dlg {
+  background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--red);
+  border-radius: 0 8px 8px 0; padding: 11px 16px; font-size: 13px; line-height: 1.7;
+  max-width: 72%; color: var(--text); box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  animation: dlgIn 0.3s ease;
+}
+.dlg .spk { font-weight: 700; color: var(--red); letter-spacing: 1px; margin-right: 6px; }
+.wc {
+  background: var(--gold-soft); border: 1px solid rgba(196,160,64,0.3); border-radius: 6px;
+  padding: 8px 12px; font-size: 11px; color: #6a5420;
+}
+.wc .tag {
+  display: inline-block; background: var(--gold); color: #fff; font-size: 8px;
+  padding: 2px 7px; border-radius: 3px; margin-right: 7px; font-weight: 700; letter-spacing: 2px;
+}
+.bar {
+  align-self: center; text-align: center; font-size: 10px; color: var(--red-deep);
+  background: linear-gradient(135deg, var(--red-soft), var(--gold-soft));
+  border: 1px solid rgba(168,32,32,0.18); border-radius: 20px; padding: 6px 18px;
+  font-weight: 600; letter-spacing: 2px; margin: 2px 0;
+}
+.sys-msg {
+  text-align: center; font-size: 12px; color: var(--red);
+  background: var(--red-soft); border: 1px dashed rgba(168,32,32,0.3);
+  border-radius: 8px; padding: 10px 16px; letter-spacing: 1px;
+}
+.loading-msg {
+  text-align: center; font-size: 12px; color: var(--gold-deep);
+  background: var(--gold-soft); border: 1px dashed rgba(196,160,64,0.4);
+  border-radius: 8px; padding: 10px 16px; letter-spacing: 2px;
+  animation: pulse 1.2s infinite;
+}
+@keyframes pulse { 0%,100% {opacity:1;} 50% {opacity:0.5;} }
+
+/* 选项 */
+.options {
+  display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 20px;
+  border-top: 1px solid var(--border); background: var(--surface);
+}
+.opt {
+  background: var(--surface-2); border: 1px solid var(--border-strong); border-radius: 6px;
+  padding: 11px 14px; font-size: 11px; color: var(--text-2); cursor: pointer;
+  flex: 1; min-width: 160px; text-align: left; line-height: 1.5;
+  font-family: var(--font-s); letter-spacing: 0.5px; transition: all 0.2s;
+}
+.opt:hover {
+  border-color: var(--red); color: var(--red-deep);
+  background: var(--red-soft); transform: translateY(-1px);
+}
+
+/* 输入 */
+.input-row {
+  display: flex; gap: 8px; padding: 10px 20px;
+  border-top: 1px solid var(--border); background: var(--surface);
+}
+.input-row input {
+  flex: 1; background: var(--surface-2); border: 1px solid var(--border-strong);
+  border-radius: 6px; padding: 10px 14px; font-size: 12px; color: var(--text);
+  outline: none; font-family: var(--font-s); letter-spacing: 1px; transition: all 0.2s;
+}
+.input-row input::placeholder { color: var(--text-3); }
+.input-row input:focus { border-color: var(--red); box-shadow: 0 0 0 3px rgba(168,32,32,0.08); }
+.send-btn {
+  background: linear-gradient(135deg, var(--red) 0%, var(--red-deep) 100%);
+  border: none; color: #fff; padding: 10px 20px; border-radius: 6px;
+  font-size: 12px; font-weight: 600; letter-spacing: 3px; cursor: pointer;
+  font-family: var(--font-s); transition: all 0.2s; white-space: nowrap;
+}
+.send-btn:hover { box-shadow: 0 4px 14px rgba(168,32,32,0.25); transform: translateY(-1px); }
+.send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.quick-row { display: flex; gap: 4px; padding: 0 20px 6px; background: var(--surface); }
+.quick-row button {
+  background: var(--surface-2); border: 1px solid var(--border); color: var(--text-3);
+  padding: 3px 10px; border-radius: 12px; font-size: 9px; letter-spacing: 1px;
+  cursor: pointer; font-family: var(--font-s); transition: all 0.2s;
+}
+.quick-row button:hover { border-color: var(--red); color: var(--red); }
+
+/* 右侧关系 */
+.roster {
+  width: 160px; background: var(--surface); border-left: 1px solid var(--border);
+  padding: 14px 10px; overflow-y: auto; flex-shrink: 0;
+}
+.roster-title {
+  font-size: 8px; color: var(--text-3); letter-spacing: 4px; text-align: center;
+  padding-bottom: 10px; border-bottom: 1px solid var(--border); margin-bottom: 10px;
+}
+.roster-card {
+  background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px;
+  padding: 8px 10px; margin-bottom: 6px; transition: all 0.2s;
+}
+.roster-card:hover { border-color: var(--gold); box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.roster-card .rname { font-size: 10px; font-weight: 600; color: var(--red-deep); letter-spacing: 1px; }
+.roster-card .rrel { font-size: 8px; color: var(--text-3); margin-top: 2px; }
+.roster-card .rrel span { color: var(--gold-deep); }
+
+/* 弹窗 */
+.overlay {
+  position: fixed; inset: 0; background: rgba(40,30,20,0.35);
+  backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center;
+  z-index: 100; animation: fadeIn 0.2s;
+}
+.panel {
+  background: var(--surface); border: 1px solid var(--gold); border-radius: 10px;
+  padding: 24px; max-width: 460px; width: 92%; max-height: 75vh; overflow-y: auto;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.12); animation: panelIn 0.25s;
+}
+.panel h2 {
+  font-family: var(--font-d); font-size: 17px; color: var(--red-deep); text-align: center;
+  letter-spacing: 5px; padding-bottom: 12px; border-bottom: 1px solid var(--border); margin-bottom: 14px;
+}
+.panel .close {
+  display: block; margin: 14px auto 0; border: 1px solid var(--red); color: var(--red);
+  background: none; padding: 7px 24px; border-radius: 4px; font-size: 11px;
+  letter-spacing: 3px; cursor: pointer; font-family: var(--font-s); transition: all 0.2s;
+}
+.panel .close:hover { background: var(--red); color: #fff; }
+
+@keyframes dlgIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes panelIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+@media (max-width: 860px) {
+  .left-panel { display: none; }
+  .roster { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="top-nav">
+  <span class="nav-logo">荣耀</span>
+  <span class="nav-sub">GLORY</span>
+  <div class="nav-spacer"></div>
+  <div class="nav-actions">
+    <button onclick="saveGame()">存档</button>
+    <button onclick="loadGame()">读取</button>
+  </div>
+</header>
+
+<div class="main">
+  <aside class="left-panel">
+    <div class="char-card">
+      <div class="char-header">
+        <div class="char-avatar" id="avatar">?</div>
+        <div>
+          <div class="char-name" id="charName">未创建角色</div>
+          <div class="char-identity" id="charIdentity">—</div>
+          <span class="char-level-badge" id="charLv">Lv 1</span>
+        </div>
+      </div>
+      <div class="exp-row">
+        <span class="exp-label">EXP</span>
+        <div class="exp-bar-wrap"><div class="exp-bar" id="expBar" style="width:0%;"></div></div>
+        <span class="exp-text" id="expText">0/100</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-icon hp">HP</span>
+        <div class="stat-bar-wrap"><div class="stat-bar hp" id="hpBar" style="width:100%;"></div></div>
+        <span class="stat-text" id="hpText">100/100</span>
+      </div>
+      <div class="stat-row">
+        <span class="stat-icon mp">MP</span>
+        <div class="stat-bar-wrap"><div class="stat-bar mp" id="mpBar" style="width:100%;"></div></div>
+        <span class="stat-text" id="mpText">50/50</span>
+      </div>
+      <div class="res-grid">
+        <div class="res-item">◈ 银币 <b id="silverDisp">0</b></div>
+        <div class="res-item">⚔ <b id="arenaDisp">0胜0负</b></div>
+        <div class="res-item">◈ <b id="locDisp">新手村</b></div>
+        <div class="res-item">◈ <b id="guildDisp">未加入</b></div>
+      </div>
+    </div>
+    <div class="equip-section">
+      <div class="equip-title">装备</div>
+      <div class="equip-grid">
+        <div class="equip-slot">🗡 <span class="e-name" id="weaponDisp">白装</span><span class="e-grade" id="weaponGrade"></span></div>
+        <div class="equip-slot">🛡 <span class="e-name" id="armorDisp">白装</span><span class="e-grade" id="armorGrade"></span></div>
+      </div>
+    </div>
+    <nav class="panel-nav">
+      <div class="nav-section-title">面板</div>
+      <button class="active" onclick="showGloryPanel()">◈ 荣耀面板</button>
+      <button onclick="showQuestPanel()">▤ 任务面板</button>
+      <button onclick="showHintPanel()">✦ 提示</button>
+      <div class="nav-section-title">系统</div>
+      <button onclick="resetGame()">↺ 重新开始</button>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <div class="story-flow" id="story"></div>
+    <div class="quick-row">
+      <button onclick="quickWord('荣耀')">荣耀</button>
+      <button onclick="quickWord('任务')">任务</button>
+      <button onclick="quickWord('提示')">提示</button>
+    </div>
+    <div class="options" id="optionsWrap" style="display:none;"></div>
+    <div class="input-row">
+      <input type="text" id="userInput" placeholder="输入你的行动..." onkeydown="if(event.key==='Enter')sendInput()">
+      <button class="send-btn" id="sendBtn" onclick="sendInput()">行动</button>
+    </div>
+  </main>
+
+  <aside class="roster">
+    <div class="roster-title">角色关系</div>
+    <div id="rosterCards"></div>
+  </aside>
+</div>
+
+<div class="overlay" id="overlay" style="display:none;" onclick="closeModal(event)">
+  <div class="panel" id="panelBody"></div>
+</div>
+
+<script>
+// ==================== 配置 ====================
+const API_URL = 'https://love.qinyan.icu/v1/chat/completions';
+const API_KEY = 'sk-EtVVtHw7Zl75VFzkhYchKNXt5VywIh4MpQWh8hWcyHhRI9e5';
+const MODEL = 'claude-opus-5';
+
+// ==================== 系统提示词 ====================
+const SYSTEM_PROMPT = `你是《全职高手》第十区人生模拟器的游戏引擎。玩家是一个新玩家，在荣耀第十区冒险。
+
+【玩家背景】
+\${playerBg}
+
+【当前状态】
+等级：\${level}级 | 银币：\${silver} | 竞技场：\${wins}胜\${losses}负 | 地点：\${loc} | 公会：\${guild}
+
+【世界规则】
+- 荣耀有24职业六大系。20级转职，50级觉醒。
+- 玩家是普通玩家（但有自己的秘密），操作水平略高于普通玩家但不如职业选手。
+- NPC必须按性格说话，不OOC。NPC只知道亲眼所见的事。
+- 玩家行动有后果。禁止剧透：君莫笑=叶修这件事玩家还不知道。
+- 主角没有主角光环，越级打怪可能死。
+
+【输出格式】
+你必须输出JSON，结构如下：
+{
+  "narration": ["旁白1", "旁白2", "旁白3"],
+  "dialogues": [{"speaker": "说话人", "content": "台词（不超过25字）"}],
+  "world": [{"speaker": "名字", "content": "世界频道消息"}],
+  "status_change": {"level": null, "silver": null, "exp": null, "hp": null, "mp": null, "loc": null},
+  "options": ["选项1（含风险暗示）", "选项2（逆反/搞事）", "选项3（观望/探索）", "自由行动（做任何你想做的事）"]
+}
+- narration最多3条，每条不超过30字。
+- dialogues可以0-3条。
+- world可以0-2条。
+- status_change：只有数值变化时才给值，否则null。
+- options必须4个，第4个永远是"自由行动（做任何你想做的事）"。
+- 不要输出JSON以外的任何内容。`;
+
+// ==================== 游戏状态 ====================
+let G = {
+  pid: '', identity: '', level: 1, silver: 0, aw: 0, al: 0,
+  loc: '新手村', guild: '未加入',
+  exp: 0, expMax: 100,
+  hp: 100, hpMax: 100, mp: 50, mpMax: 50,
+  relations: {'叶修':'陌生','陈果':'陌生','唐柔':'陌生','蓝河':'陌生','黄少天':'陌生'},
+  weapon: {name:'白装', grade:''}, armor: {name:'白装', grade:''},
+  skills: ['无'],
+  main: [
+    {name:'开荒', status:'进行中', content:'开服第一周——练级、转职（20级）、别被大公会清出野图', reward:'等级推进'},
+    {name:'？？？', status:'未解锁', content:'？？？', reward:'？？？'},
+    {name:'？？？', status:'未解锁', content:'？？？', reward:'？？？'}
+  ],
+  daily: {name:'练级', status:'可执行', content:'完成一次有效练级或副本', reward:'等级进度'},
+  log: '第十区开服，世界频道热闹非凡',
+  status: '正常',
+  started: false,
+  chatHistory: []
+};
+
+let pendingAction = null;
+
+function $(id){ return document.getElementById(id); }
+
+// ==================== 角色卡刷新 ====================
+function refreshCharCard(){
+  if(!G.started || !G.pid){
+    $('charName').textContent = '未创建角色';
+    $('charIdentity').textContent = '—';
+    $('charLv').textContent = 'Lv 1';
+    $('avatar').textContent = '?';
+    $('expBar').style.width = '0%';
+    $('expText').textContent = '0/100';
+    $('silverDisp').textContent = '0';
+    $('arenaDisp').textContent = '0胜0负';
+    $('locDisp').textContent = '新手村';
+    $('guildDisp').textContent = '未加入';
+    $('weaponDisp').textContent = '白装';
+    $('weaponGrade').textContent = '';
+    $('armorDisp').textContent = '白装';
+    $('armorGrade').textContent = '';
+    $('hpText').textContent = G.hpMax + '/' + G.hpMax;
+    $('mpText').textContent = G.mpMax + '/' + G.mpMax;
+    $('hpBar').style.width = '100%';
+    $('mpBar').style.width = '100%';
+    return;
+  }
+  $('charName').textContent = G.pid;
+  $('charIdentity').textContent = G.identity;
+  $('charLv').textContent = 'Lv ' + G.level;
+  $('avatar').textContent = G.pid.charAt(0);
+  $('expBar').style.width = Math.round(G.exp / G.expMax * 100) + '%';
+  $('expText').textContent = G.exp + '/' + G.expMax;
+  $('silverDisp').textContent = G.silver;
+  $('arenaDisp').textContent = G.aw + '胜' + G.al + '负';
+  $('locDisp').textContent = G.loc;
+  $('guildDisp').textContent = G.guild;
+  $('weaponDisp').textContent = G.weapon.name;
+  $('weaponGrade').textContent = G.weapon.grade;
+  $('armorDisp').textContent = G.armor.name;
+  $('armorGrade').textContent = G.armor.grade;
+  $('hpText').textContent = G.hp + '/' + G.hpMax;
+  $('mpText').textContent = G.mp + '/' + G.mpMax;
+  $('hpBar').style.width = Math.round(G.hp / G.hpMax * 100) + '%';
+  $('mpBar').style.width = Math.round(G.mp / G.mpMax * 100) + '%';
+}
+
+// ==================== 消息系统 ====================
+function addMsg(type, spk, content){
+  const s = $('story');
+  const d = document.createElement('div');
+  if(type === 'narr'){ d.className='narr'; d.textContent=content; }
+  else if(type === 'dlg'){ d.className='dlg'; d.innerHTML='<span class="spk">'+spk+'：</span>'+content; }
+  else if(type === 'wc'){ d.className='wc'; d.innerHTML='<span class="tag">世界</span><b>'+spk+'：</b>'+content; }
+  else if(type === 'sys'){ d.className='sys-msg'; d.textContent=content; }
+  else if(type === 'loading'){ d.className='loading-msg'; d.textContent=content; d.id='loadingMsg'; }
+  s.appendChild(d);
+  s.scrollTop = s.scrollHeight;
+}
+function removeLoading(){
+  const el = document.getElementById('loadingMsg');
+  if(el) el.remove();
+}
+
+function setBar(){
+  const bars = document.querySelectorAll('.bar');
+  const txt = '【Lv '+G.level+'｜银币 '+G.silver+'｜竞技场 '+G.aw+'胜'+G.al+'负｜'+G.loc+'】';
+  if(bars.length > 0){
+    bars[bars.length-1].textContent = txt;
+  } else {
+    const s = $('story');
+    const d = document.createElement('div');
+    d.className = 'bar';
+    d.textContent = txt;
+    s.appendChild(d);
+    s.scrollTop = s.scrollHeight;
+  }
+  refreshCharCard();
+}
+
+// ==================== 选项 ====================
+function showOpts(opts){
+  const w = $('optionsWrap');
+  w.style.display = 'flex';
+  w.innerHTML = '';
+  opts.forEach((text, i) => {
+    const b = document.createElement('button');
+    b.className = 'opt';
+    b.textContent = text;
+    b.onclick = () => {
+      w.style.display='none'; w.innerHTML='';
+      if(i === 3){
+        pendingAction = 'waitFree';
+        addMsg('sys', '你想做什么？在输入框输入你的行动。');
+        $('userInput').focus();
+      } else {
+        sendToAI(text);
+      }
+    };
+    w.appendChild(b);
+  });
+}
+function hideOpts(){ const w=$('optionsWrap'); w.style.display='none'; w.innerHTML=''; }
+
+// ==================== AI 调用 ====================
+async function sendToAI(playerAction){
+  $('sendBtn').disabled = true;
+  addMsg('loading', '—— AI 生成中 ——');
+
+  let sysPrompt = SYSTEM_PROMPT
+    .replace('${playerBg}', G.identity || '未知')
+    .replace('${level}', G.level)
+    .replace('${silver}', G.silver)
+    .replace('${wins}', G.aw)
+    .replace('${losses}', G.al)
+    .replace('${loc}', G.loc)
+    .replace('${guild}', G.guild);
+
+  const messages = [
+    { role: 'system', content: sysPrompt }
+  ];
+
+  const recentHistory = G.chatHistory.slice(-8);
+  messages.push(...recentHistory);
+  messages.push({ role: 'user', content: playerAction });
+
+  try {
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + API_KEY
+      },
+      body: JSON.stringify({
+        model: MODEL,
+        messages: messages,
+        max_tokens: 1200,
+        temperature: 0.8
+      })
+    });
+
+    const data = await res.json();
+    removeLoading();
+    $('sendBtn').disabled = false;
+
+    if(data.choices && data.choices[0] && data.choices[0].message){
+      const content = data.choices[0].message.content;
+      parseAIResponse(content, playerAction);
+    } else {
+      addMsg('sys', 'AI 返回异常，请重试。');
+      console.error(data);
+    }
+  } catch(err) {
+    removeLoading();
+    $('sendBtn').disabled = false;
+    addMsg('sys', '请求失败：' + err.message);
+    console.error(err);
+  }
+}
+
+// ==================== 解析 AI 回复 ====================
+function parseAIResponse(content, playerAction){
+  G.chatHistory.push({ role: 'user', content: playerAction });
+  G.chatHistory.push({ role: 'assistant', content: content });
+  if(G.chatHistory.length > 20) G.chatHistory = G.chatHistory.slice(-20);
+
+  let data;
+  try {
+    let cleaned = content.trim();
+    if(cleaned.startsWith('```')) {
+      cleaned = cleaned.replace(/```json\n?/g, '').replace(/```\n?/g, '');
+    }
+    data = JSON.parse(cleaned);
+  } catch(e) {
+    addMsg('narr', content);
+    setBar();
+    showOpts([
+      '继续探索',
+      '尝试一个大胆的举动',
+      '停下来观察周围',
+      '自由行动（做任何你想做的事）'
+    ]);
+    return;
+  }
+
+  if(data.narration && Array.isArray(data.narration)){
+    data.narration.forEach(n => addMsg('narr', n));
+  }
+  if(data.dialogues && Array.isArray(data.dialogues)){
+    data.dialogues.forEach(d => {
+      if(d && d.speaker && d.content) addMsg('dlg', d.speaker, d.content);
+    });
+  }
+  if(data.world && Array.isArray(data.world)){
+    data.world.forEach(w => {
+      if(w && w.speaker && w.content) addMsg('wc', w.speaker, w.content);
+    });
+  }
+
+  if(data.status_change){
+    const sc = data.status_change;
+    if(sc.level) G.level = sc.level;
+    if(sc.silver) G.silver = sc.silver;
+    if(sc.exp !== null && sc.exp !== undefined) { G.exp = sc.exp; }
+    if(sc.hp) G.hp = sc.hp;
+    if(sc.mp) G.mp = sc.mp;
+    if(sc.loc) G.loc = sc.loc;
+  }
+
+  setBar();
+
+  if(data.options && Array.isArray(data.options) && data.options.length >= 4){
+    showOpts(data.options.slice(0, 4));
+  } else {
+    showOpts([
+      '继续探索',
+      '尝试一个大胆的举动',
+      '停下来观察周围',
+      '自由行动（做任何你想做的事）'
+    ]);
+  }
+}
+
+// ==================== 开场 ====================
+function init(){
+  addMsg('narr','休息一年，然后回来。');
+  addMsg('narr','午夜零点，第十区开服。几十万玩家同一秒挤进新手村。');
+  addMsg('narr','你坐在电脑前，光标停在「创建角色」的界面上。');
+  showOpts([
+    '【A】网游新人——第一次玩荣耀，什么都不懂',
+    '【B】材料商人——老玩家转区，带着启动资金',
+    '【C】公会打手——被大公会雇来的雇佣兵',
+    '【D】自定义——你决定自己的来路'
+  ]);
+}
+
+function pickIdentity(type){
+  const m = {'A':'网游新人','B':'材料商人','C':'公会打手'};
+  G.identity = m[type];
+  G.started = true;
+  refreshCharCard();
+  addMsg('narr','你选择了【'+m[type]+'】。');
+  afterIdentity();
+}
+
+function afterIdentity(){
+  addMsg('narr','六大系24职业图标滚动而过。20级之后才有资格转职。');
+  addMsg('narr','新手村开服夜景：人挤人，任务NPC被围三层。');
+  pendingAction = 'awaitId';
+  addMsg('sys', '你的角色叫什么ID？（在输入框输入游戏里的名字）');
+  $('userInput').focus();
+}
+
+function setPid(id){
+  id = id.trim();
+  if(!id){ addMsg('sys','ID不能为空，请重新输入。'); return; }
+  G.pid = id;
+  pendingAction = null;
+  refreshCharCard();
+  addMsg('wc','系统公告','欢迎玩家【'+id+'】进入第十区！');
+  beginStory();
+}
+
+function beginStory(){
+  addMsg('narr','你握紧新手木剑，走向野外第一只小怪。');
+  addMsg('narr','一刀砍下，小怪倒地。');
+  G.silver += 5;
+  G.weapon = {name:'新手木剑', grade:'白'};
+  G.exp = 20;
+  setBar();
+  sendToAI('（游戏开场）我刚刚杀掉了第一只怪。请继续推进开服之夜剧情：世界频道炸出君莫笑首杀隐藏BOSS暗夜猫妖的消息，月中眠来拉我组队刷格林之森。');
+}
+
+// ==================== 输入处理 ====================
+function sendInput(){
+  const inp = $('userInput');
+  const t = inp.value.trim();
+  if(!t) return;
+  inp.value = '';
+
+  const trigs = ['荣耀','任务','提示','存档','读取存档'];
+  if(trigs.includes(t)){
+    quickWord(t);
+    return;
+  }
+
+  if(pendingAction === 'awaitId'){
+    setPid(t);
+    return;
+  }
+
+  if(pendingAction === 'customIdentity'){
+    G.identity = t;
+    G.started = true;
+    pendingAction = null;
+    refreshCharCard();
+    addMsg('narr','你的来路：'+t+'。');
+    afterIdentity();
+    return;
+  }
+
+  if(pendingAction === 'waitFree'){
+    pendingAction = null;
+    sendToAI(t);
+    return;
+  }
+
+  sendToAI(t);
+}
+
+// ==================== 选项点击处理（覆盖默认） ====================
+document.addEventListener('click', function(e){
+  if(e.target.classList && e.target.classList.contains('opt')){
+    const text = e.target.textContent;
+    // 检查是否是身份选择
+    if(text.includes('【A】')){
+      e.target.parentElement.style.display = 'none';
+      e.target.parentElement.innerHTML = '';
+      pickIdentity('A');
+      return;
+    }
+    if(text.includes('【B】')){
+      e.target.parentElement.style.display = 'none';
+      e.target.parentElement.innerHTML = '';
+      pickIdentity('B');
+      return;
+    }
+    if(text.includes('【C】')){
+      e.target.parentElement.style.display = 'none';
+      e.target.parentElement.innerHTML = '';
+      pickIdentity('C');
+      return;
+    }
+    if(text.includes('【D】')){
+      e.target.parentElement.style.display = 'none';
+      e.target.parentElement.innerHTML = '';
+      pendingAction = 'customIdentity';
+      addMsg('sys', '请输入你的自定义身份（在输入框打字）');
+      $('userInput').focus();
+      return;
+    }
+  }
+});
+
+// ==================== 触发词 ====================
+function quickWord(w){
+  switch(w){
+    case '荣耀': showGloryPanel(); break;
+    case '任务': showQuestPanel(); break;
+    case '提示': showHintPanel(); break;
+    case '存档': saveGame(); break;
+    case '读取存档': loadGame(); break;
+  }
+}
+
+// ==================== 面板 ====================
+function showGloryPanel(){
+  const rel = Object.entries(G.relations).filter(([_,v])=>v!=='陌生').map(([k,v])=>k+'·'+v).join(' ') || '—';
+  const h = `<h2>『荣耀面板』</h2>
+  <div style="border:1px solid rgba(196,160,64,0.4);border-radius:8px;padding:18px;background:rgba(196,160,64,0.04);">
+    <p style="font-family:var(--font-d);font-size:19px;font-weight:700;color:var(--red-deep);margin-bottom:10px;">${G.pid||'未设定ID'} <span style="font-size:12px;color:var(--text-2);font-weight:400;">· ${G.identity||'未选择'} · Lv ${G.level}</span></p>
+    <p style="color:var(--text-2);margin-bottom:6px;font-size:12px;">◈ 位置：${G.loc}</p>
+    <p style="margin-bottom:6px;font-size:12px;">◈ 银币：<b style="color:var(--gold-deep);">${G.silver}</b></p>
+    <p style="margin-bottom:6px;font-size:12px;">◈ 竞技场：${G.aw}胜${G.al}负</p>
+    <p style="margin-bottom:6px;font-size:12px;">◈ 公会：${G.guild}</p>
+    <p style="margin-bottom:6px;font-size:12px;">◈ 装备：${G.weapon.name}（${G.weapon.grade||'白'}）｜${G.armor.name}（${G.armor.grade||'白'}）</p>
+    <p style="margin-bottom:6px;font-size:12px;">◈ 技能：${G.skills.join('｜')}</p>
+    <hr style="border-color:var(--border);margin:10px 0;">
+    <p style="font-size:11px;color:var(--text-3);margin-bottom:4px;">关系：${rel}</p>
+    <p style="font-size:11px;color:var(--text-3);margin-bottom:4px;">荣耀见闻：${G.log}</p>
+    <p style="font-size:11px;color:var(--text-3);">状态：<span style="color:var(--red);">${G.status}</span></p>
+  </div>`;
+  showPanel(h);
+}
+
+function showQuestPanel(){
+  let h = '<h2>【任务面板】</h2>';
+  h += '<div style="margin-bottom:12px;"><h3 style="color:var(--red-deep);font-size:13px;margin-bottom:6px;">主线</h3>';
+  G.main.forEach(q=>{
+    const sc = q.status==='进行中' ? 'var(--red)' : 'var(--text-3)';
+    h += `<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:6px;">
+      <p style="font-weight:600;color:var(--red-deep);font-size:12px;">${q.name} <span style="color:${sc};font-size:10px;">【${q.status}】</span></p>
+      <p style="color:var(--text-2);font-size:11px;margin-top:3px;">${q.content}</p>
+      <p style="color:var(--text-3);font-size:11px;">奖励：${q.reward}</p>
+    </div>`;
+  });
+  h += '</div><div><h3 style="color:var(--red-deep);font-size:13px;margin-bottom:6px;">日常</h3>';
+  h += `<div style="background:var(--surface-2);border:1px solid var(--border);border-radius:6px;padding:10px;">
+    <p style="font-weight:600;color:var(--red-deep);font-size:12px;">${G.daily.name} <span style="color:var(--text-3);font-size:10px;">【${G.daily.status}】</span></p>
+    <p style="color:var(--text-2);font-size:11px;margin-top:3px;">${G.daily.content}</p>
+    <p style="color:var(--text-3);font-size:11px;">奖励：${G.daily.reward}</p>
+  </div></div>`;
+  showPanel(h);
+}
+
+function showHintPanel(){
+  const h = `<h2>【提示】</h2>
+  <div style="font-size:12px;color:var(--text-2);line-height:2;">
+    <p style="color:var(--red-deep);font-weight:600;margin-bottom:4px;">主线与支线</p>
+    <p>• 去格林之森练级，冲20级转职</p>
+    <p>• 关注世界频道，君莫笑随时刷屏</p>
+    <p style="color:var(--red-deep);font-weight:600;margin:10px 0 4px;">角色互动</p>
+    <p>• 月中眠在找人组队</p>
+    <p>• 大公会正在招人</p>
+    <p style="color:var(--red-deep);font-weight:600;margin:10px 0 4px;">系统操作</p>
+    <p>• 输入「荣耀」查看面板</p>
+    <p>• 输入「存档」保存进度</p>
+    <p>• 点「自由行动」后，在输入框输入你想做的事</p>
+  </div>`;
+  showPanel(h);
+}
+
+function showPanel(h){
+  $('panelBody').innerHTML = h + '<button class="close" onclick="$(\'overlay\').style.display=\'none\'">关闭</button>';
+  $('overlay').style.display = 'flex';
+}
+function closeModal(e){
+  if(e.target === $('overlay') || e.target.className === 'close'){
+    $('overlay').style.display = 'none';
+  }
+}
+
+function updRoster(){
+  const roles = [
+    {n:'叶修（君莫笑）', s:G.relations['叶修']},
+    {n:'陈果', s:G.relations['陈果']},
+    {n:'唐柔', s:G.relations['唐柔']},
+    {n:'蓝河', s:G.relations['蓝河']},
+    {n:'黄少天', s:G.relations['黄少天']}
+  ];
+  $('rosterCards').innerHTML = roles.map(r =>
+    `<div class="roster-card"><div class="rname">${r.n}</div><div class="rrel">关系：<span>${r.s}</span></div></div>`
+  ).join('');
+}
+
+// ==================== 存档 ====================
+function saveGame(){
+  localStorage.setItem('glory10_save', JSON.stringify(G));
+  addMsg('narr','—— 游戏已保存 ——');
+}
+function loadGame(){
+  const s = localStorage.getItem('glory10_save');
+  if(!s){ addMsg('narr','没有找到存档。'); return; }
+  G = JSON.parse(s);
+  pendingAction = null;
+  addMsg('narr','—— 存档已读取 ——');
+  setBar(); updRoster(); refreshCharCard(); showGloryPanel();
+}
+function resetGame(){
+  if(confirm('确定重新开始？')){
+    localStorage.removeItem('glory10_save');
+    location.reload();
+  }
+}
+
+// ==================== 启动 ====================
+refreshCharCard();
+updRoster();
+init();
+</script>
+</body>
+</html>
